@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_infinity_scroll_list/ui/models/models.dart';
+import 'package:riverpod_infinity_scroll_list/ui/providers/all_deals_provider.dart';
 import 'package:riverpod_infinity_scroll_list/ui/services/network_service.dart';
 
 class AsyncDealsNotifier extends AsyncNotifier<FetchListWrapper<DealModel>> {
@@ -19,14 +20,27 @@ class AsyncDealsNotifier extends AsyncNotifier<FetchListWrapper<DealModel>> {
     return deals;
   }
 
-  Future<void> search(String? query) async {
+  Future<void> search(String query) async {
     _page = 0;
     _canFetch = true;
-
+    ref.refresh(allDealsProvider);
     // TODO: Debounce
-    // TODO: Clear page
-    // TODO: _canFetch(true)
-    // TODO: Try to fetch
+
+    state = const AsyncLoading();
+
+    try {
+      final deals = await _fetch(query);
+      state = AsyncData(FetchListWrapper(data: deals, canFetch: _canFetch));
+    } on DioError catch (error, stackTrace) {
+      if (error.error.toString().contains("Too Many Results - Refine Search")) {
+        _canFetch = false;
+        state = AsyncData(FetchListWrapper(data: [], canFetch: _canFetch));
+        return;
+      }
+      state = AsyncError(error, stackTrace);
+    } catch (error, stackTrace) {
+      state = AsyncError(error, stackTrace);
+    }
   }
 
   Future<void> fetch() async {

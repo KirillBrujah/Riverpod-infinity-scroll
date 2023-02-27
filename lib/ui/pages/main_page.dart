@@ -24,13 +24,13 @@ class MainPage extends StatelessWidget {
   }
 }
 
-class _SearchField extends StatelessWidget {
+class _SearchField extends ConsumerWidget {
   const _SearchField();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return TextField(
-      onChanged: (value) {},
+      onChanged: ref.read(dealsFetchProvider.notifier).search,
       decoration: const InputDecoration(
         hintText: "Title...",
         prefixIcon: Icon(Icons.search_rounded),
