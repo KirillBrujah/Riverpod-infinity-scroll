@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_infinity_scroll_list/ui/models/models.dart';
+import 'package:riverpod_infinity_scroll_list/models/models.dart';
 
 import 'deals_fetch_provider.dart';
 
@@ -18,10 +18,9 @@ class AllDealsNotifier extends Notifier<List<DealModel>> {
     return [];
   }
 
-  void updateList() {
-    ref.read(dealsFetchProvider);
+  void refreshList() {
+    state = [];
   }
-  //
 }
 
 final allDealsProvider = NotifierProvider<AllDealsNotifier, List<DealModel>>(

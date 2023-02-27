@@ -1,5 +1,5 @@
-import 'package:riverpod_infinity_scroll_list/ui/models/deals_models.dart';
-import 'package:riverpod_infinity_scroll_list/ui/utils/dio_client.dart';
+import 'package:riverpod_infinity_scroll_list/models/deals_models.dart';
+import 'package:riverpod_infinity_scroll_list/utils/dio_client.dart';
 
 class NetworkService {
   final _dio = DioClient();
@@ -8,6 +8,8 @@ class NetworkService {
     int page = 0,
     String? query,
   }) async {
+    // TODO: Remove print
+    print("GET DEALS:\n\tQuery = $query\n\tPage = $page");
     final response = await _dio.get(
       'deals',
       queryParameters: {
