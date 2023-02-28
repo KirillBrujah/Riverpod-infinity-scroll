@@ -24,49 +24,51 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  final _scrollController = ScrollController();
   final _refreshController = RefreshController(initialRefresh: false);
 
   @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
   void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
+    _refreshController.dispose();
     super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isBottom) ref.read(dealsFetchProvider.notifier).fetch(); //
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
   }
 
   @override
   Widget build(BuildContext context) {
+    final canFetch =
+        ref.watch(dealsFetchProvider.select((value) => value.value?.canFetch));
+
+    ref.listen(dealsFetchProvider, (previous, next) {
+      next.whenOrNull(
+        data: (data) {
+          _refreshController.loadComplete();
+        },
+        error: (error, stackTrace) {
+          _refreshController.loadFailed();
+        },
+      );
+    });
+
     return SmartRefresher(
       controller: _refreshController,
-      onLoading: () {
-        print("loading");
-      },
-      enablePullUp: true,
-      child: CustomScrollView(
-        // controller: _scrollController,
-        slivers: const [
+      onLoading: ref.read(dealsFetchProvider.notifier).fetch,
+      enablePullDown: false,
+      enablePullUp: canFetch == true,
+      footer: CustomFooter(
+        builder: (context, mode) {
+          if (mode == LoadStatus.loading) {
+            return const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          return Container();
+        },
+      ),
+      child: const CustomScrollView(
+        slivers: [
           _SearchField(),
+          _EmptyListLoading(),
           _DealsList(),
-          // _Upload(),
         ],
       ),
     );
@@ -83,7 +85,6 @@ class _SearchField extends ConsumerWidget {
       pinned: false,
       snap: true,
       toolbarHeight: 60,
-      // backgroundColor: Colors.white,
       elevation: 0,
       flexibleSpace: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -102,20 +103,22 @@ class _SearchField extends ConsumerWidget {
   }
 }
 
-class _Upload extends ConsumerWidget {
-  const _Upload();
+class _EmptyListLoading extends ConsumerWidget {
+  const _EmptyListLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dealsProvider = ref.watch(dealsFetchProvider);
+    final isLoading =
+        ref.watch(dealsFetchProvider.select((value) => value.isLoading));
+    final dealsIsEmpty =
+        ref.watch(allDealsProvider.select((deals) => deals.isEmpty));
 
-    return SliverFillRemaining(
+    if (!dealsIsEmpty || !isLoading) return const SliverToBoxAdapter();
+
+    return const SliverFillRemaining(
       hasScrollBody: false,
-      child: dealsProvider.whenOrNull(
-        loading: () => const SizedBox(
-          height: 100,
-          child: Center(child: CircularProgressIndicator()),
-        ),
+      child: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }

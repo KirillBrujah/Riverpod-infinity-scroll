@@ -16,6 +16,7 @@ class AsyncDealsNotifier extends AsyncNotifier<FetchListWrapper<DealModel>> {
       page: _page++,
       query: query,
     );
+    _page += 30;
     _canFetch = deals.isNotEmpty;
     return deals;
   }
