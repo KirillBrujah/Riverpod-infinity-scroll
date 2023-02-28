@@ -23,8 +23,10 @@ mixin _$DealModel {
   String get dealID => throw _privateConstructorUsedError;
   String get internalName => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get salePrice => throw _privateConstructorUsedError;
-  String get normalPrice => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _doubleFromString)
+  double get salePrice => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: _doubleFromString)
+  double get normalPrice => throw _privateConstructorUsedError;
   String? get thumb => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,8 +44,8 @@ abstract class $DealModelCopyWith<$Res> {
       {String dealID,
       String internalName,
       String title,
-      String salePrice,
-      String normalPrice,
+      @JsonKey(fromJson: _doubleFromString) double salePrice,
+      @JsonKey(fromJson: _doubleFromString) double normalPrice,
       String? thumb});
 }
 
@@ -83,11 +85,11 @@ class _$DealModelCopyWithImpl<$Res, $Val extends DealModel>
       salePrice: null == salePrice
           ? _value.salePrice
           : salePrice // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       normalPrice: null == normalPrice
           ? _value.normalPrice
           : normalPrice // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       thumb: freezed == thumb
           ? _value.thumb
           : thumb // ignore: cast_nullable_to_non_nullable
@@ -107,8 +109,8 @@ abstract class _$$_DealModelCopyWith<$Res> implements $DealModelCopyWith<$Res> {
       {String dealID,
       String internalName,
       String title,
-      String salePrice,
-      String normalPrice,
+      @JsonKey(fromJson: _doubleFromString) double salePrice,
+      @JsonKey(fromJson: _doubleFromString) double normalPrice,
       String? thumb});
 }
 
@@ -146,11 +148,11 @@ class __$$_DealModelCopyWithImpl<$Res>
       salePrice: null == salePrice
           ? _value.salePrice
           : salePrice // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       normalPrice: null == normalPrice
           ? _value.normalPrice
           : normalPrice // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       thumb: freezed == thumb
           ? _value.thumb
           : thumb // ignore: cast_nullable_to_non_nullable
@@ -161,14 +163,15 @@ class __$$_DealModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_DealModel implements _DealModel {
+class _$_DealModel extends _DealModel {
   const _$_DealModel(
       {required this.dealID,
       this.internalName = "",
       this.title = "",
-      required this.salePrice,
-      required this.normalPrice,
-      this.thumb});
+      @JsonKey(fromJson: _doubleFromString) required this.salePrice,
+      @JsonKey(fromJson: _doubleFromString) required this.normalPrice,
+      this.thumb})
+      : super._();
 
   factory _$_DealModel.fromJson(Map<String, dynamic> json) =>
       _$$_DealModelFromJson(json);
@@ -182,9 +185,11 @@ class _$_DealModel implements _DealModel {
   @JsonKey()
   final String title;
   @override
-  final String salePrice;
+  @JsonKey(fromJson: _doubleFromString)
+  final double salePrice;
   @override
-  final String normalPrice;
+  @JsonKey(fromJson: _doubleFromString)
+  final double normalPrice;
   @override
   final String? thumb;
 
@@ -228,14 +233,15 @@ class _$_DealModel implements _DealModel {
   }
 }
 
-abstract class _DealModel implements DealModel {
+abstract class _DealModel extends DealModel {
   const factory _DealModel(
       {required final String dealID,
       final String internalName,
       final String title,
-      required final String salePrice,
-      required final String normalPrice,
+      @JsonKey(fromJson: _doubleFromString) required final double salePrice,
+      @JsonKey(fromJson: _doubleFromString) required final double normalPrice,
       final String? thumb}) = _$_DealModel;
+  const _DealModel._() : super._();
 
   factory _DealModel.fromJson(Map<String, dynamic> json) =
       _$_DealModel.fromJson;
@@ -247,9 +253,11 @@ abstract class _DealModel implements DealModel {
   @override
   String get title;
   @override
-  String get salePrice;
+  @JsonKey(fromJson: _doubleFromString)
+  double get salePrice;
   @override
-  String get normalPrice;
+  @JsonKey(fromJson: _doubleFromString)
+  double get normalPrice;
   @override
   String? get thumb;
   @override

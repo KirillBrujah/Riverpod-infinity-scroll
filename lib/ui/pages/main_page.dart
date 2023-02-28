@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:riverpod_infinity_scroll_list/models/deals_models.dart';
 import 'package:riverpod_infinity_scroll_list/providers/providers.dart';
+import 'package:riverpod_infinity_scroll_list/utils/format_functions.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -133,25 +135,25 @@ class _DealsList extends ConsumerWidget {
 
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      sliver: SliverGrid(
+      sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             final deal = allDeals[index];
 
-            return _DealCard(deal: deal);
+            return _ListDealCard(deal);
           },
           childCount: allDeals.length,
         ),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
+        // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        //   crossAxisCount: 3,
+        // ),
       ),
     );
   }
 }
 
-class _DealCard extends StatelessWidget {
-  const _DealCard({Key? key, required this.deal}) : super(key: key);
+class _GridDealCard extends StatelessWidget {
+  const _GridDealCard({Key? key, required this.deal}) : super(key: key);
 
   final DealModel deal;
 
@@ -176,14 +178,114 @@ class _DealCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(deal.normalPrice),
+                  Text('${deal.normalPrice}'),
                   const VerticalDivider(),
-                  Text(deal.salePrice),
+                  Text('${deal.salePrice}'),
                 ],
               ),
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ListDealCard extends StatelessWidget {
+  const _ListDealCard(this.deal, {Key? key}) : super(key: key);
+
+  final DealModel deal;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Card(
+      child: Row(
+        children: [
+          _ThumbImage(
+            path: deal.thumb,
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              height: 100,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            deal.title,
+                            maxLines: 3,
+                            style: textTheme.titleMedium,
+                          ),
+                        ),
+                        // TODO: Del button
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          // TODO: Add decoration for discount
+                        ),
+                        padding: EdgeInsets.fromLTRB(4, 4, 4, 0),
+                        child: Text(
+                          '${deal.discountPercent}%',
+                          style: textTheme.titleMedium,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        formatCurrency(deal.normalPrice),
+                        style: textTheme.titleSmall?.copyWith(
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        formatCurrency(deal.salePrice),
+                        style: textTheme.titleLarge,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ThumbImage extends StatelessWidget {
+  const _ThumbImage({Key? key, this.path}) : super(key: key);
+
+  final String? path;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.horizontal(left: Radius.circular(5)),
+      child: SizedBox(
+        height: 100,
+        width: 100,
+        child: path != null
+            ? CachedNetworkImage(
+                imageUrl: path!,
+                fit: BoxFit.fill,
+                placeholder: (context, url) => const Placeholder(),
+              )
+            : const Placeholder(),
       ),
     );
   }

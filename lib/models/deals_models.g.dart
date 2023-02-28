@@ -10,8 +10,8 @@ _$_DealModel _$$_DealModelFromJson(Map<String, dynamic> json) => _$_DealModel(
       dealID: json['dealID'] as String,
       internalName: json['internalName'] as String? ?? "",
       title: json['title'] as String? ?? "",
-      salePrice: json['salePrice'] as String,
-      normalPrice: json['normalPrice'] as String,
+      salePrice: _doubleFromString(json['salePrice']),
+      normalPrice: _doubleFromString(json['normalPrice']),
       thumb: json['thumb'] as String?,
     );
 
