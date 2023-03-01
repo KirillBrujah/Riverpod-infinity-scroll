@@ -223,7 +223,11 @@ class _ListDealCard extends StatelessWidget {
                             style: textTheme.titleMedium,
                           ),
                         ),
-                        // TODO: Del button
+                        const SizedBox(width: 10),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: _DeleteButton(deal),
+                        ),
                       ],
                     ),
                   ),
@@ -233,27 +237,41 @@ class _ListDealCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          // TODO: Add decoration for discount
+                        decoration: const BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(5),
+                          ),
                         ),
-                        padding: EdgeInsets.fromLTRB(4, 4, 4, 0),
+                        padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
                         child: Text(
                           '${deal.discountPercent}%',
-                          style: textTheme.titleMedium,
+                          style: textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        formatCurrency(deal.normalPrice),
-                        style: textTheme.titleSmall?.copyWith(
-                          decoration: TextDecoration.lineThrough,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 10, 4),
+                        child: Text(
+                          formatCurrency(deal.normalPrice),
+                          style: textTheme.titleSmall?.copyWith(
+                            decoration: TextDecoration.lineThrough,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withOpacity(0.4),
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        formatCurrency(deal.salePrice),
-                        style: textTheme.titleLarge,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                        child: Text(
+                          formatCurrency(deal.salePrice),
+                          style: textTheme.titleLarge?.copyWith(
+                            color: Colors.redAccent,
+                          ),
+                        ),
                       ),
                     ],
                   )
@@ -263,6 +281,30 @@ class _ListDealCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _DeleteButton extends StatelessWidget {
+  const _DeleteButton(this.deal);
+
+  final DealModel deal;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: Watch is delete loading state
+
+    // return const SizedBox(
+    //   width: 16,
+    //   height: 16,
+    //   child: CircularProgressIndicator(),
+    // );
+    return InkWell(
+      borderRadius: BorderRadius.circular(100),
+      onTap: () {
+        // TODO: Implement delete
+      },
+      child: const Icon(Icons.cancel_outlined),
     );
   }
 }
