@@ -5,15 +5,6 @@ class DioClient {
 
   DioClient._privateConstructor() {
     _dio = Dio();
-    // _dio.interceptors.add(PrettyDioLogger(
-    //   requestHeader: true,
-    //   requestBody: true,
-    //   responseBody: true,
-    //   responseHeader: false,
-    //   error: true,
-    //   compact: true,
-    //   maxWidth: 90,
-    // ));
     _dio.options.headers["Content-Type"] = "application/json";
     _dio.options.headers["Accept"] = "application/json";
     _dio.options.baseUrl = 'https://www.cheapshark.com/api/1.0/';

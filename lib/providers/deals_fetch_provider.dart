@@ -79,7 +79,6 @@ class AsyncDealsNotifier extends AsyncNotifier<FetchListWrapper<DealModel>> {
       );
     }
   }
-//
 }
 
 final dealsFetchProvider =

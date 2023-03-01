@@ -3,7 +3,6 @@ import 'dart:ui';
 
 class Debounce {
   final Duration duration;
-  // VoidCallback action;
   Timer? _timer;
 
   Debounce(this.duration);

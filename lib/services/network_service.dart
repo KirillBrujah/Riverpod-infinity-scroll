@@ -8,8 +8,6 @@ class NetworkService {
     int page = 0,
     String? query,
   }) async {
-    // TODO: Remove print
-    print("GET DEALS:\n\tQuery = $query\n\tPage = $page");
     final response = await _dio.get(
       'deals',
       queryParameters: {
