@@ -13,6 +13,8 @@ class AsyncDealsNotifier extends AsyncNotifier<FetchListWrapper<DealModel>> {
   int _page = 0;
   bool _canFetch = true;
 
+  final _debounce = Debounce(const Duration(seconds: 1));
+
   Future<void> _fetch([String? query]) async {
     state = const AsyncLoading();
     try {
@@ -38,8 +40,6 @@ class AsyncDealsNotifier extends AsyncNotifier<FetchListWrapper<DealModel>> {
       state = AsyncError(error, stackTrace);
     }
   }
-
-  final _debounce = Debounce(const Duration(seconds: 1));
 
   Future<void> search(String query) async {
     _debounce.run(() async {
