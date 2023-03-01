@@ -36,8 +36,9 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final canFetch =
-        ref.watch(dealsFetchProvider.select((value) => value.value?.canFetch));
+    final canFetch = ref.watch(
+      dealsFetchProvider.select((value) => value.value?.canFetch),
+    );
 
     ref.listen(dealsFetchProvider, (previous, next) {
       next.whenOrNull(
@@ -137,54 +138,8 @@ class _DealsList extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final deal = allDeals[index];
-
-            return _ListDealCard(deal);
-          },
+          (context, index) => _ListDealCard(allDeals[index]),
           childCount: allDeals.length,
-        ),
-        // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //   crossAxisCount: 3,
-        // ),
-      ),
-    );
-  }
-}
-
-class _GridDealCard extends StatelessWidget {
-  const _GridDealCard({Key? key, required this.deal}) : super(key: key);
-
-  final DealModel deal;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                deal.title,
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('${deal.normalPrice}'),
-                  const VerticalDivider(),
-                  Text('${deal.salePrice}'),
-                ],
-              ),
-            )
-          ],
         ),
       ),
     );
@@ -199,6 +154,7 @@ class _ListDealCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Card(
       child: Row(
@@ -226,7 +182,7 @@ class _ListDealCard extends StatelessWidget {
                         const SizedBox(width: 10),
                         Align(
                           alignment: Alignment.topRight,
-                          child: _DeleteButton(deal),
+                          child: _RemoveButton(deal),
                         ),
                       ],
                     ),
@@ -247,7 +203,7 @@ class _ListDealCard extends StatelessWidget {
                         child: Text(
                           '${deal.discountPercent}%',
                           style: textTheme.titleMedium?.copyWith(
-                            color: Colors.white,
+                            color: colorScheme.onError,
                           ),
                         ),
                       ),
@@ -257,10 +213,7 @@ class _ListDealCard extends StatelessWidget {
                           formatCurrency(deal.normalPrice),
                           style: textTheme.titleSmall?.copyWith(
                             decoration: TextDecoration.lineThrough,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.4),
+                            color: colorScheme.onSurface.withOpacity(0.4),
                           ),
                         ),
                       ),
@@ -285,28 +238,31 @@ class _ListDealCard extends StatelessWidget {
   }
 }
 
-class _DeleteButton extends StatelessWidget {
-  const _DeleteButton(this.deal);
+class _RemoveButton extends ConsumerWidget {
+  const _RemoveButton(this.deal);
 
   final DealModel deal;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: Watch is delete loading state
+  Widget build(BuildContext context, WidgetRef ref) {
+    final removeLoadings = ref.watch(removeDealLoadingsProvider);
 
-    // return const SizedBox(
-    //   width: 16,
-    //   height: 16,
-    //   child: CircularProgressIndicator(),
-    // );
-    return InkWell(
-      borderRadius: BorderRadius.circular(100),
-      onTap: () {
-        // TODO: Implement delete
-      },
-      child: const Icon(Icons.cancel_outlined),
-    );
+    return removeLoadings.contains(deal)
+        ? const SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(),
+          )
+        : InkWell(
+            borderRadius: BorderRadius.circular(100),
+            onTap: _handleRemove(ref),
+            child: const Icon(Icons.cancel_outlined),
+          );
   }
+
+  VoidCallback _handleRemove(WidgetRef ref) => () {
+        ref.read(asyncRemoveDealProvider.notifier).remove(deal);
+      };
 }
 
 class _ThumbImage extends StatelessWidget {

@@ -18,6 +18,10 @@ class AllDealsNotifier extends Notifier<List<DealModel>> {
     return [];
   }
 
+  void remove(DealModel deal) {
+    state = List.of(state)..remove(deal);
+  }
+
   void refreshList() {
     state = [];
   }
