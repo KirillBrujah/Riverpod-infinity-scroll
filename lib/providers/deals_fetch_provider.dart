@@ -3,13 +3,17 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_infinity_scroll_list/models/models.dart';
 import 'package:riverpod_infinity_scroll_list/services/network_service.dart';
 import 'package:riverpod_infinity_scroll_list/utils/debounce.dart';
 
 import 'all_deals_provider.dart';
 
-class AsyncDealsNotifier extends AsyncNotifier<FetchListWrapper<DealModel>> {
+part 'deals_fetch_provider.g.dart';
+
+@riverpod
+class DealsFetch extends _$DealsFetch {
   int _page = 0;
   bool _canFetch = true;
 
@@ -80,8 +84,3 @@ class AsyncDealsNotifier extends AsyncNotifier<FetchListWrapper<DealModel>> {
     }
   }
 }
-
-final dealsFetchProvider =
-    AsyncNotifierProvider<AsyncDealsNotifier, FetchListWrapper<DealModel>>(
-  () => AsyncDealsNotifier(),
-);

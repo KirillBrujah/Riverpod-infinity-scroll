@@ -1,12 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_infinity_scroll_list/models/deals_models.dart';
 
 import 'all_deals_provider.dart';
 import 'remove_deal_loadings_provider.dart';
 
-class AsyncRemoveDealNotifier extends AsyncNotifier<DealModel?> {
+part 'async_remove_deal_provider.g.dart';
+
+@riverpod
+class AsyncRemoveDeal extends _$AsyncRemoveDeal {
   @override
   FutureOr<DealModel?> build() {
     return null;
@@ -28,8 +31,3 @@ class AsyncRemoveDealNotifier extends AsyncNotifier<DealModel?> {
     ref.read(allDealsProvider.notifier).remove(deal);
   }
 }
-
-final asyncRemoveDealProvider =
-    AsyncNotifierProvider<AsyncRemoveDealNotifier, DealModel?>(
-  () => AsyncRemoveDealNotifier(),
-);

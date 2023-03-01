@@ -1,19 +1,12 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_infinity_scroll_list/models/models.dart';
 
-import 'deals_fetch_provider.dart';
+part 'all_deals_provider.g.dart';
 
-class AllDealsNotifier extends Notifier<List<DealModel>> {
+@riverpod
+class AllDeals extends _$AllDeals {
   @override
   List<DealModel> build() {
-    // ref.listen(
-    //   dealsFetchProvider.select(
-    //       (AsyncValue<FetchListWrapper> value) => value.asData?.value.data),
-    //   (previous, next) {
-    //     if (next == null) return;
-    //     state = [...state, ...next];
-    //   },
-    // );
     return [];
   }
 
@@ -29,12 +22,3 @@ class AllDealsNotifier extends Notifier<List<DealModel>> {
     state = [];
   }
 }
-
-final allDealsProvider = NotifierProvider<AllDealsNotifier, List<DealModel>>(
-  () {
-    return AllDealsNotifier();
-  },
-  dependencies: [
-    dealsFetchProvider,
-  ],
-);

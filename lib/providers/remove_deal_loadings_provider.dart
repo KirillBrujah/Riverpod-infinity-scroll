@@ -1,7 +1,10 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_infinity_scroll_list/models/models.dart';
 
-class RemoveDealLoadingsNotifier extends Notifier<Set<DealModel>> {
+part 'remove_deal_loadings_provider.g.dart';
+
+@riverpod
+class RemoveDealLoadings extends _$RemoveDealLoadings {
   @override
   Set<DealModel> build() {
     return {};
@@ -15,8 +18,3 @@ class RemoveDealLoadingsNotifier extends Notifier<Set<DealModel>> {
     state = Set.of(state)..add(deal);
   }
 }
-
-final removeDealLoadingsProvider =
-    NotifierProvider<RemoveDealLoadingsNotifier, Set<DealModel>>(
-  () => RemoveDealLoadingsNotifier(),
-);
