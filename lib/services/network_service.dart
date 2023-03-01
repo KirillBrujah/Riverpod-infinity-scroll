@@ -1,6 +1,7 @@
 import 'package:riverpod_infinity_scroll_list/models/deals_models.dart';
 import 'package:riverpod_infinity_scroll_list/utils/dio_client.dart';
 
+/// Class controller for API requests
 class NetworkService {
   final _dio = DioClient();
 

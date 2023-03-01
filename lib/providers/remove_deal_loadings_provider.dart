@@ -3,6 +3,7 @@ import 'package:riverpod_infinity_scroll_list/models/models.dart';
 
 part 'remove_deal_loadings_provider.g.dart';
 
+/// Provider-container for storing current removing of deals
 @riverpod
 class RemoveDealLoadings extends _$RemoveDealLoadings {
   @override

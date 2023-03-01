@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:riverpod_infinity_scroll_list/models/models.dart';
 import 'package:riverpod_infinity_scroll_list/services/network_service.dart';
@@ -12,6 +11,7 @@ import 'all_deals_provider.dart';
 
 part 'deals_fetch_provider.g.dart';
 
+/// Provider for fetching deals from server.
 @riverpod
 class DealsFetch extends _$DealsFetch {
   int _page = 0;

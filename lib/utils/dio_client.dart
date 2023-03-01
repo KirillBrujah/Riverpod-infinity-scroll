@@ -1,16 +1,17 @@
 import 'package:dio/dio.dart';
 
+/// Class wrapper for Dio object with presetting
 class DioClient {
   late final Dio _dio;
 
-  DioClient._privateConstructor() {
+  DioClient._() {
     _dio = Dio();
     _dio.options.headers["Content-Type"] = "application/json";
     _dio.options.headers["Accept"] = "application/json";
     _dio.options.baseUrl = 'https://www.cheapshark.com/api/1.0/';
   }
 
-  static final DioClient _dioClient = DioClient._privateConstructor();
+  static final DioClient _dioClient = DioClient._();
 
   factory DioClient() {
     return _dioClient;

@@ -8,6 +8,8 @@ import 'remove_deal_loadings_provider.dart';
 
 part 'async_remove_deal_provider.g.dart';
 
+/// Provider for controlling async requests for removing deals from list.
+/// API doesn't allow it, so it's only imitating
 @riverpod
 class AsyncRemoveDeal extends _$AsyncRemoveDeal {
   @override
